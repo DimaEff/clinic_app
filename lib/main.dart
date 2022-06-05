@@ -1,7 +1,16 @@
 import 'package:clinic_app/screens/landing.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(ClinicApp());
+import 'firebase_options.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(ClinicApp());
+}
 
 class ClinicApp extends StatelessWidget {
   const ClinicApp({Key? key}) : super(key: key);
