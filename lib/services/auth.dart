@@ -36,7 +36,7 @@ class AuthService {
   }
 
   Future<dynamic> createUserWithEmailAndPassword(
-      String email, String password, String name) async {
+      String email, String name, String password, String snils, String passport) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -44,7 +44,7 @@ class AuthService {
       );
       final uid = result.user?.uid;
       if (uid != null) {
-        _usersService.createUser(uid, name);
+        _usersService.createUser(uid, name, snils, passport);
       }
       return result.user;
     } catch (e) {

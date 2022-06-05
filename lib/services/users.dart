@@ -4,10 +4,12 @@ class UsersService {
   final CollectionReference<Map<String, dynamic>> _collection =
       FirebaseFirestore.instance.collection('users');
 
-  Future<void> createUser(String id, String name) async {
+  Future<void> createUser(String id, String name, String snils, String passport) async {
     final userDoc = _collection.doc(id);
     await userDoc.set({
       'name': name,
+      'snils': snils,
+      'passport': passport,
       'role': 'patient',
     });
   }

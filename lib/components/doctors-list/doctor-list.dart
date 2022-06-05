@@ -10,7 +10,7 @@ class DoctorList extends StatelessWidget {
     Doctor(
         name: 'Alex',
         education: 'Mining Un',
-        experience: '26 years',
+        experience: '26',
         specialty: 'Уролог',
         appointments: [
           Appointment(start: DateTime.now(), finish: DateTime.now()),
@@ -19,7 +19,7 @@ class DoctorList extends StatelessWidget {
     Doctor(
         name: 'Maria',
         education: 'Mining Un',
-        experience: '2 years',
+        experience: '2',
         specialty: 'Терапевт',
         appointments: [
           Appointment(start: DateTime.now(), finish: DateTime.now()),
@@ -28,7 +28,7 @@ class DoctorList extends StatelessWidget {
     Doctor(
         name: 'Sam',
         education: 'Mining Un',
-        experience: '15 years',
+        experience: '15',
         specialty: 'Оккулист',
         appointments: [
           Appointment(start: DateTime.now(), finish: DateTime.now()),
