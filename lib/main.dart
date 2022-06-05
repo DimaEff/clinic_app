@@ -1,3 +1,4 @@
+import 'package:clinic_app/components/doctors-list/doctor-list.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(ClinicApp());
@@ -30,7 +31,7 @@ class HomePage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(title: Text('Clinic'), leading: Icon(Icons.medication_outlined),),
-        body: Text('Clinic'),
+        body: DoctorList(),
       ),
     );
   }
