@@ -1,4 +1,5 @@
 import 'package:clinic_app/components/common/button.dart';
+import 'package:clinic_app/services/auth.dart';
 import 'package:flutter/material.dart';
 
 import '../components/common/input.dart';
@@ -14,7 +15,30 @@ class _AuthPageState extends State<AuthPage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
-  void _login() {}
+  void clearControllers() {
+    _emailController.clear();
+    _passwordController.clear();
+  }
+
+  AuthService _authService = AuthService();
+
+  dynamic user = null;
+
+  Future<dynamic> _signIn() async {
+    user = await _authService.signInWithEmailAndPassword(
+      _emailController.text.trim(),
+      _passwordController.text.trim(),
+    );
+    clearControllers();
+  }
+
+  Future<dynamic> _signUp() async {
+    user = await _authService.createUserWithEmailAndPassword(
+      _emailController.text.trim(),
+      _passwordController.text.trim(),
+    );
+    clearControllers();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +60,7 @@ class _AuthPageState extends State<AuthPage> {
       );
     }
 
-    Widget _form(VoidCallback login, VoidCallback register) {
+    Widget _form(VoidCallback signIn, VoidCallback signUp) {
       return Container(
         child: Padding(
           padding: EdgeInsets.only(left: 20, right: 20),
@@ -63,7 +87,7 @@ class _AuthPageState extends State<AuthPage> {
                 child: Container(
                   height: 50,
                   width: 200,
-                  child: Button(label: 'Войти', onPressed: login),
+                  child: Button(label: 'Войти', onPressed: signIn),
                 ),
               ),
               Padding(
@@ -71,14 +95,14 @@ class _AuthPageState extends State<AuthPage> {
                 child: Container(
                   height: 50,
                   width: 200,
-                  child: Button(label: "Регистрация", onPressed: register),
+                  child: Button(label: "Регистрация", onPressed: signUp),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 20),
                 child: Center(
                   child: GestureDetector(
-                    onTap: (){},
+                    onTap: () {},
                     child: Text(
                       'Забыли пароль?',
                       style: TextStyle(
@@ -100,7 +124,7 @@ class _AuthPageState extends State<AuthPage> {
       body: Column(
         children: [
           _logo(),
-          _form(_login, (){}),
+          _form(_signIn, _signUp),
         ],
       ),
     );
