@@ -1,4 +1,6 @@
-import 'package:clinic_app/domain/user.dart' as MyUser;
+import 'dart:async';
+
+import 'package:clinic_app/domain/patient.dart';
 import 'package:clinic_app/services/users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,14 +22,15 @@ class AuthService {
     );
   }
 
-  Future<dynamic> signInWithEmailAndPassword(
+  Future<Patient> signInWithEmailAndPassword(
       String email, String password) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return result.user;
+
+      return _getPatient(result.user);
     } catch (e) {
       print(e);
       _showErrorToast('авторизации');
@@ -44,11 +47,10 @@ class AuthService {
       );
       final uid = result.user?.uid;
       if (uid != null) {
-        _usersService.createUser(uid, name, snils, passport);
+        await _usersService.createUser(uid, name, snils, passport);
       }
-      return result.user;
+      return _getPatient(result.user);
     } catch (e) {
-      print(e);
       _showErrorToast('регистрации');
       rethrow;
     }
@@ -67,7 +69,52 @@ class AuthService {
     await _auth.sendPasswordResetEmail(email: email);
   }
 
-  Stream<User?> getCurrentUser() {
+  Stream<User?> getUser() {
     return _auth.authStateChanges();
+  }
+
+  Stream<Future<Patient?>> getPatient() {
+    return _auth.authStateChanges().map((event) async {
+      var id = event?.uid;
+      if (id != null) {
+        return _usersService.getPatient(id);
+      }
+    });
+  }
+
+  Stream<dynamic>? getUserMap() {
+    Stream<dynamic>? stream;
+    _auth.authStateChanges().listen((event) {
+      if (event != null) {
+        stream = _usersService.collection.doc(event.uid).snapshots().map((event) => event.data());
+      }
+    });
+
+    return stream;
+  }
+
+  // Stream<dynamic> getCurrentUser() {
+    // var controller = _usersService.getPatient(uid);
+    // _auth.authStateChanges().listen((event) async {
+    //   String? id = event?.uid;
+    //   if (id != null) {
+    //   }
+    // });
+    //
+    // return streamController.stream;
+  // }
+
+  Future<Patient> _getPatient(User? user) async {
+    Patient? patient;
+    if (user != null) {
+      print(user);
+      patient = await _usersService.getPatient(user.uid);
+    }
+
+    if (patient == null) {
+      throw Error();
+    }
+
+    return patient;
   }
 }

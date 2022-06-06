@@ -8,6 +8,7 @@ class DoctorList extends StatelessWidget {
 
   final doctors = <Doctor>[
     Doctor(
+        id: '123',
         name: 'Alex',
         education: 'Mining Un',
         experience: '26',
@@ -17,6 +18,7 @@ class DoctorList extends StatelessWidget {
           Appointment(start: DateTime.now(), finish: DateTime.now()),
         ]),
     Doctor(
+        id: '123',
         name: 'Maria',
         education: 'Mining Un',
         experience: '2',
@@ -26,6 +28,7 @@ class DoctorList extends StatelessWidget {
           Appointment(start: DateTime.now(), finish: DateTime.now()),
         ]),
     Doctor(
+        id: '123',
         name: 'Sam',
         education: 'Mining Un',
         experience: '15',

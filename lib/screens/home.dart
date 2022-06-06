@@ -1,8 +1,10 @@
+import 'package:clinic_app/domain/patient.dart';
 import 'package:clinic_app/screens/appointment.dart';
 import 'package:clinic_app/screens/clinic.dart';
 import 'package:clinic_app/screens/doctors.dart';
 import 'package:clinic_app/screens/profile.dart';
 import 'package:clinic_app/services/auth.dart';
+import 'package:clinic_app/services/users.dart';
 import 'package:flutter/material.dart';
 
 import '../components/doctors-list/doctor-list.dart';
@@ -16,9 +18,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   AuthService _authService = AuthService();
+  UsersService _usersService = UsersService();
 
   int _page = 0;
-
   final _pages = <Widget>[
     ProfilePage(),
     ClinicPage(),
@@ -26,13 +28,32 @@ class _HomePageState extends State<HomePage> {
     DoctorsPage(),
   ];
 
+  String name = 'name1';
+  // setName() {
+  //   _authService.getPatient().listen((event) async {
+  //     var p = await event;
+  //     var n = p?.name;
+  //     if (n != null) {
+  //       setState(() {
+  //         name = n;
+  //       });
+  //     }
+  //   });
+  // }
+
+  @override
+  void initState() {
+    // setName();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
-          title: Text('DimaEff'),
+          title: Text(name),
           leading: GestureDetector(
             onTap: _authService.signOut,
             child: Icon(Icons.logout),

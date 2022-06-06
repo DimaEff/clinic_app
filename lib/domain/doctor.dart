@@ -10,11 +10,12 @@ class Doctor extends User {
 
 
   Doctor({
-    required String name,
+    required super.id,
+    required super.name,
     String role = 'doctor',
     required this.education,
     required this.experience,
     required this.specialty,
     required this.appointments,
-  }) : super(name: name, role: role);
+  }) : super(role: 'doctor');
 }

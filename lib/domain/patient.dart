@@ -12,6 +12,8 @@ class PatientAppointment {
 }
 
 class Patient extends User {
-  PatientAppointment appointment;
-  Patient({required super.name, required super.role, required this.appointment});
+  String snils;
+  String passport;
+
+  Patient({required super.id, required super.name, required this.snils, required this.passport}) : super(role: 'patient');
 }

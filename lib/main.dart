@@ -1,7 +1,9 @@
 import 'package:clinic_app/screens/landing.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'domain/user.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -18,15 +20,16 @@ class ClinicApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ClinicApp',
-      home: LandingPage(),
-      theme: ThemeData(
+        title: 'ClinicApp',
+        home: LandingPage(),
+        theme: ThemeData(
           primaryColor: Colors.blue,
           backgroundColor: Colors.white,
           buttonColor: Color.fromRGBO(9, 49, 112, 1),
           textTheme: TextTheme(
             bodyMedium: TextStyle(color: Colors.black),
-          )),
+          ),
+        ),
     );
   }
 }
