@@ -1,3 +1,4 @@
+import 'package:clinic_app/components/appointment-list/appointment-list.dart';
 import 'package:clinic_app/components/common/button.dart';
 import 'package:clinic_app/components/common/input.dart';
 import 'package:clinic_app/domain/patient.dart';
@@ -20,14 +21,16 @@ class _ProfilePageState extends State<ProfilePage> {
   AuthService _authService = AuthService();
   UsersService _usersService = UsersService();
 
-  Patient? patient;
+  String id = '';
   String name = 'name';
+  bool appoMode = true;
+
   setName() {
     _authService.getPatient().listen((event) async {
       var p = await event;
       if (p != null) {
         setState(() {
-          patient = p;
+          id = p.id;
           name = p.name;
           _nameController.text = p.name;
           _snilsController.text = p.snils;
@@ -59,55 +62,120 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> userInfo = [
+      Image(
+        width: 100,
+        image: NetworkImage(
+            'https://cdn-icons-png.flaticon.com/512/149/149071.png'),
+      ),
+      Text(
+        name,
+        style: TextStyle(fontSize: 40),
+      ),
+      Padding(
+        padding: EdgeInsets.only(bottom: 10, top: 50),
+        child: Input(
+          controller: _nameController,
+          icon: Icon(Icons.account_circle),
+          hint: 'name',
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(bottom: 10, top: 10),
+        child: Input(
+          controller: _snilsController,
+          icon: Icon(Icons.margin_rounded),
+          hint: 'snils',
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(bottom: 10, top: 10),
+        child: Input(
+          controller: _passportController,
+          icon: Icon(Icons.perm_contact_cal_rounded),
+          hint: 'passport',
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(top: 20),
+        child: Container(
+          height: 50,
+          width: 200,
+          child: Button(
+            label: 'Изменить',
+            onPressed: makeChanges,
+          ),
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(top: 20),
+        child: Container(
+          height: 50,
+          width: 200,
+          child: Button(
+            label: 'Мои записи',
+            onPressed: () =>
+                setState(() {
+                  appoMode = true;
+                }),
+          ),
+        ),
+      ),
+    ];
+
+    // Widget appos = [
+    //   Padding(
+    //     padding: EdgeInsets.only(top: 20),
+    //     child: Container(
+    //       height: 50,
+    //       width: 300,
+    //       child: Column(
+    //         children: [
+    //           // Padding(
+    //           //   padding: EdgeInsets.only(top: 10),
+    //           //   child: Container(
+    //           //     height: 50,
+    //           //     width: 200,
+    //           //     child: Button(
+    //           //       label: 'Мой профиль',
+    //           //       onPressed: () => setState(() {
+    //           //         appoMode = false;
+    //           //       }),
+    //           //     ),
+    //           //   ),
+    //           // ),
+    //           // Text(
+    //           //   'Ваши записи',
+    //           //   style: TextStyle(
+    //           //     fontSize: 30,
+    //           //     fontWeight: FontWeight.bold,
+    //           //   ),
+    //           // ),
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    //   ,
+    // ];
+
     return Container(
       child: Center(
         child: Padding(
           padding: EdgeInsets.only(top: 50, left: 20, right: 20),
-          child: Column(
-            children: [
-              Image(
-                width: 100,
-                image: NetworkImage(
-                    'https://cdn-icons-png.flaticon.com/512/149/149071.png'),
-              ),
-              Text(name, style: TextStyle(fontSize: 40),),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10, top: 50),
-                child: Input(
-                  controller: _nameController,
-                  icon: Icon(Icons.account_circle),
-                  hint: 'name',
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10, top: 10),
-                child: Input(
-                  controller: _snilsController,
-                  icon: Icon(Icons.margin_rounded),
-                  hint: 'snils',
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10, top: 10),
-                child: Input(
-                  controller: _passportController,
-                  icon: Icon(Icons.perm_contact_cal_rounded),
-                  hint: 'passport',
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Container(
-                  height: 50,
-                  width: 200,
-                  child: Button(
-                    label: 'Изменить',
-                    onPressed: makeChanges,
-                  ),
-                ),
-              ),
-            ],
+          child: appoMode ? GestureDetector(
+              onPanUpdate: (details) {
+                // Swiping in left direction.
+                if (details.delta.dx < 0) {
+                  setState(() {
+                    appoMode = false;
+                  });
+                }
+              },
+              child: AppointmentList(uid: id)
+          ) : Column(
+            children: userInfo,
           ),
+          // child: AppointmentList(uid: id),
         ),
       ),
     );

@@ -6,7 +6,6 @@ class Doctor extends User {
   String specialty;
   String education;
   String experience;
-  List<Appointment> appointments;
 
 
   Doctor({
@@ -16,6 +15,5 @@ class Doctor extends User {
     required this.education,
     required this.experience,
     required this.specialty,
-    required this.appointments,
   }) : super(role: 'doctor');
 }
