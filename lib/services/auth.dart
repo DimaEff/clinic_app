@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:clinic_app/consts.dart';
+import 'package:clinic_app/domain/doctor.dart';
 import 'package:clinic_app/domain/patient.dart';
 import 'package:clinic_app/services/users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,6 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final UsersService _usersService = UsersService();
+  final Doctors _doctors = Doctors();
 
   void _showErrorToast(String msg) {
     Fluttertoast.showToast(
@@ -20,6 +23,23 @@ class AuthService {
         textColor: Colors.white,
         fontSize: 16.0
     );
+  }
+
+  Future<Doctor> signInWithEmailAndPasswordDoc(
+      String email, String password) async {
+    try {
+      UserCredential result = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      var user = result.user;
+      return _doctors.doctors.firstWhere((element) => element.id == user!.uid);
+    } catch (e) {
+      print(e);
+      _showErrorToast('авторизации');
+      rethrow;
+    }
   }
 
   Future<Patient> signInWithEmailAndPassword(

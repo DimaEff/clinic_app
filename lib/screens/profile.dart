@@ -21,7 +21,7 @@ class _ProfilePageState extends State<ProfilePage> {
   AuthService _authService = AuthService();
   UsersService _usersService = UsersService();
 
-  String id = '';
+  String? id;
   String name = 'name';
   bool appoMode = true;
 
@@ -30,6 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
       var p = await event;
       if (p != null) {
         setState(() {
+          print(p.id);
           id = p.id;
           name = p.name;
           _nameController.text = p.name;
@@ -123,40 +124,6 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     ];
 
-    // Widget appos = [
-    //   Padding(
-    //     padding: EdgeInsets.only(top: 20),
-    //     child: Container(
-    //       height: 50,
-    //       width: 300,
-    //       child: Column(
-    //         children: [
-    //           // Padding(
-    //           //   padding: EdgeInsets.only(top: 10),
-    //           //   child: Container(
-    //           //     height: 50,
-    //           //     width: 200,
-    //           //     child: Button(
-    //           //       label: 'Мой профиль',
-    //           //       onPressed: () => setState(() {
-    //           //         appoMode = false;
-    //           //       }),
-    //           //     ),
-    //           //   ),
-    //           // ),
-    //           // Text(
-    //           //   'Ваши записи',
-    //           //   style: TextStyle(
-    //           //     fontSize: 30,
-    //           //     fontWeight: FontWeight.bold,
-    //           //   ),
-    //           // ),
-    //         ],
-    //       ),
-    //     ),
-    //   ),
-    //   ,
-    // ];
 
     return Container(
       child: Center(
@@ -171,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   });
                 }
               },
-              child: AppointmentList(uid: id)
+              child: AppointmentList(uid: id!)
           ) : Column(
             children: userInfo,
           ),

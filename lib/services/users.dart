@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:clinic_app/domain/doctor.dart';
 import 'package:clinic_app/domain/patient.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

@@ -4,24 +4,22 @@ import 'package:flutter/cupertino.dart';
 
 import 'appointment-list-item.dart';
 
-class AppointmentList extends StatefulWidget {
-  AppointmentList({Key? key, required this.uid}) : super(key: key);
+class DocAppointmentList extends StatefulWidget {
+  DocAppointmentList({Key? key, required this.spec}) : super(key: key);
 
-  String uid;
+  String spec;
   @override
-  State<AppointmentList> createState() => _AppointmentListState();
+  State<DocAppointmentList> createState() => _DocAppointmentList();
 }
 
-class _AppointmentListState extends State<AppointmentList> {
+class _DocAppointmentList extends State<DocAppointmentList> {
   AppointmentService _appointmentService = AppointmentService();
 
   List<Appointment> appos = [];
   getAppos() async {
     var ap = await _appointmentService.getAppoinments();
     setState(() {
-      print(widget.uid);
-      print(ap.map((e) => e.patientId));
-      appos = ap.where((e) => e.patientId == widget.uid).toList();
+      appos = ap.where((element) => element.specialty == widget.spec).toList();
     });
   }
 

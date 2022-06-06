@@ -1,4 +1,5 @@
 import 'package:clinic_app/screens/auth.dart';
+import 'package:clinic_app/screens/doctor.dart';
 import 'package:clinic_app/screens/home.dart';
 import 'package:clinic_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,7 +27,10 @@ class _LandingPageState extends State<LandingPage> {
         child: StreamBuilder(
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              return snapshot.hasData ? HomePage() : AuthPage();
+              print(snapshot.data?.email?.toString().substring(0, 3));
+              bool isDoc = snapshot.data?.email?.toString().substring(0, 3) == 'doc';
+              print(isDoc);
+              return snapshot.hasData ? (isDoc ? DoctorPage(email: snapshot.data?.email) : HomePage()) : AuthPage();
             })
     );
   }

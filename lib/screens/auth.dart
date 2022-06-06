@@ -1,4 +1,5 @@
 import 'package:clinic_app/components/common/button.dart';
+import 'package:clinic_app/consts.dart';
 import 'package:clinic_app/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -19,8 +20,9 @@ class _AuthPageState extends State<AuthPage> {
   TextEditingController _snilsController = TextEditingController();
   TextEditingController _passportController = TextEditingController();
 
-  bool _registerMode = false;
+  bool? doctor = false;
 
+  bool _registerMode = false;
   void _switchMode() {
     setState(() {
       _registerMode = !_registerMode;
@@ -107,10 +109,18 @@ class _AuthPageState extends State<AuthPage> {
   Future<void> _signIn() async {
     if (!_registerMode) {
       _checkSignInFields();
-      user = await _authService.signInWithEmailAndPassword(
-        _emailController.text.trim(),
-        _passwordController.text.trim(),
-      );
+
+      if (doctor!) {
+        user = await _authService.signInWithEmailAndPasswordDoc(
+            _emailController.text.trim(),
+          _passportController.text.trim(),
+        );
+      } else {
+        user = await _authService.signInWithEmailAndPassword(
+          _emailController.text.trim(),
+          _passwordController.text.trim(),
+        );
+      }
       clearControllers();
     } else {
       _switchMode();
@@ -247,21 +257,21 @@ class _AuthPageState extends State<AuthPage> {
                       onPressed: signUp),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Center(
-                  child: GestureDetector(
-                    onTap: _forgotPasswordShowDialog,
-                    child: Text(
-                      'Забыли пароль?',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.only(top: 20),
+              //   child: Center(
+              //     child: GestureDetector(
+              //       onTap: _forgotPasswordShowDialog,
+              //       child: Text(
+              //         'Забыли пароль?',
+              //         style: TextStyle(
+              //           color: Colors.white,
+              //           fontSize: 20,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
