@@ -21,13 +21,14 @@ class _ProfilePageState extends State<ProfilePage> {
   UsersService _usersService = UsersService();
 
   Patient? patient;
-
+  String name = 'name';
   setName() {
     _authService.getPatient().listen((event) async {
       var p = await event;
       if (p != null) {
         setState(() {
           patient = p;
+          name = p.name;
           _nameController.text = p.name;
           _snilsController.text = p.snils;
           _passportController.text = p.passport;
@@ -69,6 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 image: NetworkImage(
                     'https://cdn-icons-png.flaticon.com/512/149/149071.png'),
               ),
+              Text(name, style: TextStyle(fontSize: 40),),
               Padding(
                 padding: EdgeInsets.only(bottom: 10, top: 50),
                 child: Input(

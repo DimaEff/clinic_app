@@ -18,7 +18,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   AuthService _authService = AuthService();
-  UsersService _usersService = UsersService();
 
   int _page = 0;
   final _pages = <Widget>[
@@ -28,7 +27,7 @@ class _HomePageState extends State<HomePage> {
     DoctorsPage(),
   ];
 
-  String name = 'name1';
+  // String name = 'name1';
   // setName() {
   //   _authService.getPatient().listen((event) async {
   //     var p = await event;
@@ -53,7 +52,6 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
-          title: Text(name),
           leading: GestureDetector(
             onTap: _authService.signOut,
             child: Icon(Icons.logout),
