@@ -18,7 +18,7 @@ class Doctors {
         specialty: 'Уролог',
         experience: '8',
         education: 'Mining university',
-        id: 'SJRAQGEiMxYkMwYxQkujfnDYbpA3',
+        id: 'pbwgnNDzjDc6fkVAbhYZfCrxJ4R2',
         email: 'doctor2@mail.com'),
     Doctor(
         name: 'Тептина А.Б.',
@@ -90,7 +90,7 @@ class Doctors {
   }
 
   Doctor findByEmail(String email) {
-    return doctors.firstWhere((element) => element.email == email);
+    return doctors.firstWhere((element) => element.email == email, orElse: () => doctors[0]);
   }
 
   // Future<void> createDoctors() async {
