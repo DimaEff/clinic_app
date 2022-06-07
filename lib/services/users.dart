@@ -19,6 +19,17 @@ class UsersService {
     return patient;
   }
 
+  Future<Doctor?> getDoctor(String uid) async {
+    Doctor? doctor;
+    var ui = await collection.doc(uid).get();
+    var data = ui.data();
+    if (data != null) {
+      doctor = doctorFromJson(uid, data);
+    }
+
+    return doctor;
+  }
+
   Future<void> createUser(
       String id, String name, String snils, String passport) async {
     final userDoc = collection.doc(id);
@@ -53,6 +64,17 @@ class UsersService {
       res = event;
     });
     return res;
+  }
+
+  Doctor doctorFromJson(String id, Map<String, dynamic> user) {
+    return Doctor(
+      id: id,
+      name: user['name'],
+      education: user['education'],
+      specialty: user['specialty'],
+      experience: user['experience'],
+      email: 'email',
+    );
   }
 
   Patient patientFromJson(String id, Map<String, dynamic> user) {

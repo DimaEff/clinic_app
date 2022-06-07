@@ -2,6 +2,7 @@ import 'package:clinic_app/components/appointment-list/appointment-list.dart';
 import 'package:clinic_app/components/common/button.dart';
 import 'package:clinic_app/consts.dart';
 import 'package:clinic_app/services/auth.dart';
+import 'package:clinic_app/services/users.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,9 +10,9 @@ import '../components/appointment-list/doc-appointment-list.dart';
 import '../domain/doctor.dart';
 
 class DoctorPage extends StatefulWidget {
-  DoctorPage({Key? key, required this.email}) : super(key: key);
+  DoctorPage({Key? key, required this.uid}) : super(key: key);
 
-  final String email;
+  final String uid;
 
   @override
   _DoctorPageState createState() => _DoctorPageState();
@@ -19,15 +20,21 @@ class DoctorPage extends StatefulWidget {
 
 class _DoctorPageState extends State<DoctorPage> {
   AuthService _authService = AuthService();
+  UsersService _usersService = UsersService();
 
   Doctor? _doctor;
   bool appo = false;
 
+  Future<void> setDoctor() async {
+    var doc = await _usersService.getDoctor(widget.uid);
+    setState(() async {
+      _doctor = doc;
+    });
+  }
+
   @override
   void initState() {
-    setState(() {
-      _doctor = Doctors().findByEmail(widget.email);
-    });
+    setDoctor();
     super.initState();
   }
 
