@@ -39,7 +39,7 @@ class Doctors {
         specialty: 'Оториноларинголог',
         experience: '12',
         education: 'Mining university',
-        id: '1PNnwDhI7LMXU0Tew3TeryVo77E2',
+        id: 'sgw4ZH4T0cdCpe4aNGK9mQ0bMlH3',
         email: 'doctor5@mail.com'),
     Doctor(
         name: 'Левченко А.К.',
@@ -60,28 +60,28 @@ class Doctors {
         specialty: 'Инфекционист',
         experience: '12',
         education: 'Mining university',
-        id: 'OS3WCQzLK4YpGT8EMSFd9uOYDTd2',
+        id: 'c5ufJJSR4LcsgswYUjfSsyERz482',
         email: 'doctor8@mail.com'),
     Doctor(
         name: 'Балатаева А.С.',
         specialty: 'Онколог',
         experience: '12',
         education: 'Mining university',
-        id: 'sLonpNMYsOh2CDmBRJmwDNJsOoo2',
+        id: 'OS3WCQzLK4YpGT8EMSFd9uOYDTd2',
         email: 'doctor9@mail.com'),
     Doctor(
         name: 'Чутчев А.С.',
         specialty: 'Гастраэнтеролог',
         experience: '12',
         education: 'Mining university',
-        id: 'qhHPdIgvpLhb7msy5Hmj6V8ENXz2',
+        id: 'sLonpNMYsOh2CDmBRJmwDNJsOoo2',
         email: 'doctor10@mail.com'),
     Doctor(
         name: 'Забайакльская Н.С.',
         specialty: 'Кардиолог',
         experience: '12',
         education: 'Mining university',
-        id: 'iRUsrM1fpzOLeuapNJU4JsHhPEA2',
+        id: 'qhHPdIgvpLhb7msy5Hmj6V8ENXz2',
         email: 'doctor11@mail.com'),
   ];
 
@@ -90,7 +90,7 @@ class Doctors {
   }
 
   Doctor findByEmail(String email) {
-    return doctors.firstWhere((element) => element.email == email, orElse: () => doctors[0]);
+    return doctors.firstWhere((element) => element.email == email);
   }
 
   // Future<void> createDoctors() async {

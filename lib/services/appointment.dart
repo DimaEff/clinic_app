@@ -14,8 +14,9 @@ class AppointmentService {
   final CollectionReference<Map<String, dynamic>> collection =
       FirebaseFirestore.instance.collection('appointments');
 
-  Future<IsAppointmentDateValid> isAppointmentDateValid(String date) async {
-    var appos = await getAppoinments();
+  Future<IsAppointmentDateValid> isAppointmentDateValid(String date, String spec) async {
+    var apposAll = await getAppoinments();
+    var appos = apposAll.where((e) => e.specialty == spec).toList();
     var appoDate = DateTime.parse(date);
 
     var isWorkHoursValid = _checkIsWorkingHoursValid(appoDate);
@@ -43,10 +44,20 @@ class AppointmentService {
     bool check(Appointment appo) {
       var startDate = DateTime.parse(appo.start);
       var finishDate = DateTime.parse(appo.start).add(Duration(minutes: 10));
-      return startDate.isBefore(date) || finishDate.isAfter(date);
+      print(date.toString());
+      print(startDate.toString());
+      print(finishDate.toString());
+      return startDate.isAfter(date) || finishDate.isBefore(date);
     }
 
-    return appos.any(check);
+    bool res = true;
+    for (final appo in appos) {
+      if (!check(appo)) {
+        res = false;
+      }
+    }
+
+    return res;
   }
 
   Future<List<Appointment>> getAppoinments() async {

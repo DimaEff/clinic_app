@@ -38,7 +38,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
   }
 
   Future<void> addAppointment() async {
-    var isValid = await _appointmentService.isAppointmentDateValid(selectedDate!);
+    var isValid = await _appointmentService.isAppointmentDateValid(selectedDate!, dropdownValue!);
     if (!isValid.isAppointmentTimeNotExists) {
       Fluttertoast.showToast(
         msg: 'Запись на данное время уже существует',
