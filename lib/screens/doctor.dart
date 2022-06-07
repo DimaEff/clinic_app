@@ -21,19 +21,37 @@ class DoctorPage extends StatefulWidget {
 class _DoctorPageState extends State<DoctorPage> {
   AuthService _authService = AuthService();
   UsersService _usersService = UsersService();
+  Doctors _doctors = Doctors();
 
-  Doctor? _doctor;
   bool appo = false;
 
-  Future<void> setDoctor() async {
-    var doc = await _usersService.getDoctor(widget.uid);
-    setState(() async {
-      _doctor = doc;
-    });
+  Doctor? doc;
+  String? specialty;
+  String? experience;
+  String? education;
+  setDoctor() {
+    // _authService.getDoctor().listen((d) async {
+    //   var doc = await d;
+    //   var specialty = doc?.specialty;
+    //   var experience = doc?.experience;
+    //   var education = doc?.education;
+    //   if (specialty != null && experience != null && education != null) {
+    //     print(specialty);
+    //     setState(() {
+    //       print(specialty);
+    //       specialty = specialty;
+    //       experience = experience;
+    //       education = education;
+    //     });
+    //   }
+    // });
   }
 
   @override
   void initState() {
+    setState(() {
+      doc = _doctors.findById(widget.uid);
+    });
     setDoctor();
     super.initState();
   }
@@ -52,25 +70,29 @@ class _DoctorPageState extends State<DoctorPage> {
         child: Center(
           child: appo
               ? GestureDetector(
-              onPanUpdate: (details) {
-                // Swiping in left direction.
-                if (details.delta.dx < 0) {
-                  setState(() {
-                    appo = false;
-                  });
-                }
-              },
-              child: DocAppointmentList(spec: _doctor!.specialty),
-          ): Column(
+                  onPanUpdate: (details) {
+                    // Swiping in left direction.
+                    if (details.delta.dx < 0) {
+                      setState(() {
+                        appo = false;
+                      });
+                    }
+                  },
+                  child: DocAppointmentList(spec: doc?.specialty ?? '1'),
+                )
+              : Column(
                   children: [
                     Image(
                         image: NetworkImage(
                             'https://www.gostudy.cz/wp-content/themes/gostudy_eighteen/assets/pages/doctors/images/doctor-cut.png')),
-                    Text(_doctor!.specialty),
-                    Text('${_doctor!.experience} лет опыта'),
-                    Button(label: 'Записи', onPressed: () => setState(() {
-                      appo = true;
-                    })),
+                    Text(doc?.specialty ?? '1'),
+                    Text(doc?.education ?? '1'),
+                    Text('${doc?.experience ?? '1'} лет опыта'),
+                    Button(
+                        label: 'Записи',
+                        onPressed: () => setState(() {
+                              appo = true;
+                            })),
                   ],
                 ),
         ),

@@ -23,6 +23,7 @@ class _AuthPageState extends State<AuthPage> {
   bool? doctor = false;
 
   bool _registerMode = false;
+
   void _switchMode() {
     setState(() {
       _registerMode = !_registerMode;
@@ -109,18 +110,10 @@ class _AuthPageState extends State<AuthPage> {
   Future<void> _signIn() async {
     if (!_registerMode) {
       _checkSignInFields();
-
-      if (doctor!) {
-        user = await _authService.signInWithEmailAndPasswordDoc(
-            _emailController.text.trim(),
-          _passportController.text.trim(),
-        );
-      } else {
-        user = await _authService.signInWithEmailAndPassword(
-          _emailController.text.trim(),
-          _passwordController.text.trim(),
-        );
-      }
+      user = await _authService.signInWithEmailAndPassword(
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+      );
       clearControllers();
     } else {
       _switchMode();

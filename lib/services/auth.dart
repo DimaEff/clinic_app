@@ -11,7 +11,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final UsersService _usersService = UsersService();
-  final Doctors _doctors = Doctors();
 
   void _showErrorToast(String msg) {
     Fluttertoast.showToast(
@@ -21,25 +20,47 @@ class AuthService {
         timeInSecForIosWeb: 2,
         backgroundColor: Colors.red,
         textColor: Colors.white,
-        fontSize: 16.0
-    );
+        fontSize: 16.0);
   }
 
-  Future<Doctor> signInWithEmailAndPasswordDoc(
-      String email, String password) async {
+  Future<void> createDoctorWithEmailAndPassword(
+    String email,
+    String password,
+    String name,
+    String education,
+    String experience,
+    String specialty,
+  ) async {
     try {
-      UserCredential result = await _auth.signInWithEmailAndPassword(
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
       var user = result.user;
-      return _doctors.doctors.firstWhere((element) => element.id == user!.uid);
+      await _usersService.createDoctor(
+        user!.uid,
+        name,
+        education,
+        experience,
+        specialty,
+      );
+      print(email);
+      await _auth.signOut();
     } catch (e) {
       print(e);
       _showErrorToast('авторизации');
       rethrow;
     }
+  }
+
+  Stream<Future<Doctor?>> getDoctor() {
+    return _auth.authStateChanges().map((event) async {
+      var id = event?.uid;
+      if (id != null) {
+        return _usersService.getDoctor(id);
+      }
+    });
   }
 
   Future<Patient> signInWithEmailAndPassword(
@@ -58,8 +79,8 @@ class AuthService {
     }
   }
 
-  Future<dynamic> createUserWithEmailAndPassword(
-      String email, String name, String password, String snils, String passport) async {
+  Future<dynamic> createUserWithEmailAndPassword(String email, String name,
+      String password, String snils, String passport) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -67,7 +88,7 @@ class AuthService {
       );
       final uid = result.user?.uid;
       if (uid != null) {
-        await _usersService.createUser(uid, name, snils, passport);
+        await _usersService.createPatient(uid, name, snils, passport);
       }
       return _getPatient(result.user);
     } catch (e) {
@@ -106,7 +127,10 @@ class AuthService {
     Stream<dynamic>? stream;
     _auth.authStateChanges().listen((event) {
       if (event != null) {
-        stream = _usersService.collection.doc(event.uid).snapshots().map((event) => event.data());
+        stream = _usersService.collection
+            .doc(event.uid)
+            .snapshots()
+            .map((event) => event.data());
       }
     });
 
@@ -114,14 +138,14 @@ class AuthService {
   }
 
   // Stream<dynamic> getCurrentUser() {
-    // var controller = _usersService.getPatient(uid);
-    // _auth.authStateChanges().listen((event) async {
-    //   String? id = event?.uid;
-    //   if (id != null) {
-    //   }
-    // });
-    //
-    // return streamController.stream;
+  // var controller = _usersService.getPatient(uid);
+  // _auth.authStateChanges().listen((event) async {
+  //   String? id = event?.uid;
+  //   if (id != null) {
+  //   }
+  // });
+  //
+  // return streamController.stream;
   // }
 
   Future<Patient> _getPatient(User? user) async {

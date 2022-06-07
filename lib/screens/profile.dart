@@ -45,7 +45,7 @@ class _ProfilePageState extends State<ProfilePage> {
     _authService.getPatient().listen((event) async {
       var p = await event;
       if (p != null) {
-        await _usersService.updateUser(
+        await _usersService.updatePatient(
           p.id,
           _nameController.text.trim(),
           _snilsController.text.trim(),

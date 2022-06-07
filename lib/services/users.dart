@@ -30,33 +30,47 @@ class UsersService {
     return doctor;
   }
 
-  Future<void> createUser(
-      String id, String name, String snils, String passport) async {
+  Future<void> createDoctor(
+    String id,
+    String name,
+    String education,
+    String experience,
+    String specialty,
+  ) async {
     final userDoc = collection.doc(id);
-    await userDoc.set(_getUserObject(name, snils, passport));
+    await userDoc.set(_getDoctorObject(name, education, experience, specialty));
   }
 
-  Future<void> updateUser(
-      String id, String name, String snils, String passport) async {
+  Future<void> createPatient(
+    String id,
+    String name,
+    String snils,
+    String passport,
+  ) async {
+    final userDoc = collection.doc(id);
+    await userDoc.set(_getPatientObject(name, snils, passport));
+  }
+
+  Future<void> updatePatient(
+    String id,
+    String name,
+    String snils,
+    String passport,
+  ) async {
     final userDoc = collection.doc(id);
     var usrObj = {
       'name': name,
       'snils': snils,
       'passport': passport,
     };
-    print(usrObj);
     await userDoc.update(usrObj);
-    // await userDoc.update(_getUserObject(name, snils, passport));
-    // final userDoc = collection.doc('uwY3aiJpmiQtWwXVgJJcYGeCIdQ2');
-    // await userDoc.update({
-    //   'name': 'QweQwe1',
-    //   'snils': '123123123123123',
-    //   'passport': '123123123'
-    // });
   }
 
   Future<void> addedAppointment(
-      DateTime start, String patientId, String doctorId) async {}
+    DateTime start,
+    String patientId,
+    String doctorId,
+  ) async {}
 
   Future<Map<String, dynamic>?> getPatientInfo(String id) async {
     var res;
@@ -86,12 +100,23 @@ class UsersService {
     );
   }
 
-  dynamic _getUserObject(String name, String snils, String passport) {
+  dynamic _getPatientObject(String name, String snils, String passport) {
     return {
       'name': name,
       'snils': snils,
       'passport': passport,
       'role': 'patient',
+    };
+  }
+
+  dynamic _getDoctorObject(
+      String name, String education, String experience, String specialty) {
+    return {
+      'name': name,
+      'experience': experience,
+      'specialty': specialty,
+      'education': education,
+      'role': 'doctor',
     };
   }
 }
