@@ -1,5 +1,4 @@
 import 'package:clinic_app/components/common/button.dart';
-import 'package:clinic_app/components/common/input.dart';
 import 'package:clinic_app/consts.dart';
 import 'package:clinic_app/services/appointment.dart';
 import 'package:clinic_app/services/auth.dart';
@@ -23,6 +22,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
   String? selectedDate = DateTime.now().toString();
   String? patientId;
+
   setId() {
     _authService.getPatient().listen((event) async {
       var p = await event;
@@ -37,21 +37,50 @@ class _AppointmentPageState extends State<AppointmentPage> {
     });
   }
 
-  Future<void> appointment() async {
+  Future<void> addAppointment() async {
+    var isValid = await _appointmentService.isAppointmentDateValid(selectedDate!);
+    if (!isValid.isAppointmentTimeNotExists) {
+      Fluttertoast.showToast(
+        msg: 'Запись на данное время уже существует',
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 2,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+      return;
+    } else if (!isValid.isWorkHoursValid) {
+      Fluttertoast.showToast(
+        msg: 'Выбраны нерабочие часы',
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 2,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+      return;
+    }
+
     var doctorId =
         _doctors.doctors.firstWhere((e) => e.specialty == dropdownValue).id;
-    if (patientId != null) {
-      await _appointmentService.createAppointment(
-          patientId!, doctorId, selectedDate!, dropdownValue!);
-      Fluttertoast.showToast(
-          msg: 'Вы были успешно записаны',
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 2,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
+
+    await _appointmentService.createAppointment(
+      patientId!,
+      doctorId,
+      selectedDate!,
+      dropdownValue!,
+    );
+    Fluttertoast.showToast(
+        msg: 'Вы были успешно записаны',
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 2,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0,
+    );
   }
 
   @override
@@ -71,8 +100,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
         type: DateTimePickerType.dateTime,
         dateMask: 'd MMM, yyyy | hh:mm',
         initialValue: selectedDate,
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100),
+        firstDate: DateTime.now(),
+        lastDate: DateTime.now().add(Duration(days: 10)),
         icon: Icon(Icons.event),
         dateLabelText: 'Date',
         timeLabelText: "Hour",
@@ -129,7 +158,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   SizedBox(height: 20),
                   Button(
                     label: 'Записаться',
-                    onPressed: appointment,
+                    onPressed: addAppointment,
                   ),
                 ],
               )),
